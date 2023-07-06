@@ -12,10 +12,33 @@
 - [] Batch wallet operation -SWAP
 - [] Batch wallet operation -Mint NFT
 
-## Script Capabilities
-- [√] Batch account creation
-- [√] Batch cross-chain transfer; eth network => zksync era network
 
+## config
+> `cp .env.example .env`
+
+
+- ETH_URL: eth node url
+- ZKSYNC_URL : zksync node url
+- OKX_XX： (optional)
+- 
+```
+# wallet private key
+PRIVATE_KEY=xxx
+
+# eth node url
+# ETH_URL=https://rpc.ankr.com/eth_goerli
+ETH_URL=
+
+# zksync node url
+# ZKSYNC_URL=https://zksync2-testnet.zksync.dev
+ZKSYNC_URL=
+
+# OKX api （optional）
+OKX_API_KEY=ZKSYNC_URL
+OKX_SECRET_KEY=xxx
+OKX_PASS_PHRASE=xxx
+
+```
 
 ## notice
 
