@@ -1,4 +1,5 @@
 .env
 *.csv
 .idea
+accounts/*
 __pycache__

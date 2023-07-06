@@ -1,18 +1,22 @@
-import csv
+import json
+import os
 
 from eth_account import Account
 
+root_dir = os.path.dirname(os.path.abspath(__file__))
+
 
 def saveETHWallet(jsonData):
-    with open('wallets.csv', 'w', encoding='utf-8-sig', newline='') as csv_file:
-        csv_writer = csv.writer(csv_file)
-        csv_writer.writerow(["index", "address", "private_key", "public_key"])
-        csv_writer.writerows(jsonData)
+    file_path = root_dir + '/accounts/wallets.json'
+    if os.path.exists(file_path):
+        raise RuntimeError("Wallets  existed")
+    with open(file_path, 'w') as f:
+        json.dump(jsonData, f, indent=4)
 
 
-def createNewETHWallet():
+def createNewETHWallet(number):
     wallets = []
-    for id in range(100):
+    for id in range(number):
         # 添加一些随机性
         account = Account.create('zksync Random  Seed' + str(id))
         # 私钥
@@ -22,17 +26,16 @@ def createNewETHWallet():
         # 地址
         address = publicKey.to_checksum_address()
         wallet = {
-            "id": id,
+            "index": id,
             "address": address,
-            "privateKey": privateKey,
-            "publicKey": publicKey
+            "privateKey": str(privateKey)
         }
-        wallets.append(wallet.values())
+        wallets.append(wallet)
 
     return wallets
 
 
 # https://eth.antcave.club/1000
 if __name__ == '__main__':
-    wallets = createNewETHWallet()
+    wallets = createNewETHWallet(10)
     saveETHWallet(wallets)

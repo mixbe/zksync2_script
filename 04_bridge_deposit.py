@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from eth_account import Account
 from eth_account.signers.local import LocalAccount
 from eth_typing import HexStr
+from eth_utils import remove_0x_prefix
 from web3 import Web3
 from zksync2.core.types import Token
 from zksync2.manage_contracts.zksync_contract import ZkSyncContract
@@ -65,9 +66,9 @@ def deposit(zksync_provider: Web3,
 
 
 if __name__ == "__main__":
-    """
-    Batch cross-chain bridge
-    """
+    # Get the private key from OS environment variables
+    # PRIVATE_KEY = bytes.fromhex(os.environ.get("PRIVATE_KEY"))
+
     load_dotenv()
     zksync_url = os.getenv('ZKSYNC_URL')
     eth_url = os.getenv('ETH_URL')
@@ -76,22 +77,27 @@ if __name__ == "__main__":
     if eth_url is None:
         print("Err: ETH_URL not set")
 
-    key_env = EnvPrivateKey("PRIVATE_KEY")
-    account: LocalAccount = Account.from_key(key_env.key)
-
-    zk_web3 = ZkSyncBuilder.build(zksync_url)
-
-    eth_web3 = Web3(Web3.HTTPProvider(eth_url))
-
-    eth_provider = EthereumProvider(zk_web3, eth_web3, account)
-
-    amount = 0.02
-
     wallets = ReadWallets()
     accounts = wallets.get_accounts()
 
     for wallet in accounts:
-        l1_tx_hash, l2_tx_hash = deposit(zk_web3, eth_web3, eth_provider, account, amount, wallet['address'])
+        # Get account object by providing private key of the sender
+
+        account: LocalAccount = Account.from_key(bytes.fromhex(remove_0x_prefix(HexStr(wallet['privateKey']))))
+
+        # Connect to zkSync network
+        zk_web3 = ZkSyncBuilder.build(zksync_url)
+
+        # connect to Ethereum network
+        eth_web3 = Web3(Web3.HTTPProvider(eth_url))
+
+        # Create Ethereum provider
+        eth_provider = EthereumProvider(zk_web3, eth_web3, account)
+
+        # Perform the deposit
+        amount = 0.001
+
+        l1_tx_hash, l2_tx_hash = deposit(zk_web3, eth_web3, eth_provider, account, amount, None)
 
         print(f"L1 transaction: {l1_tx_hash}")
         print(f"L2 transaction: {l2_tx_hash}")

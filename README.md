@@ -1,6 +1,16 @@
 ## ZkSync Era Network Batch Airdrop Script
 
 
+## Feature
+- [√] Batch of production wallets
+- [√] Turn into ETH in batches through cross -chain
+- [√] Transfer to ETH through OKX batch (recommended method)
+- [√] Batch wallet operation -cross -chain (ETH-> ZKSYNC2)
+- [√] Batch wallet operation-transfer
+- [√] Batch wallet operation-deployment contract
+- [√] Batch wallet operation -cross -chain (ZKSYNC2-> ETH)
+- [] Batch wallet operation -SWAP
+- [] Batch wallet operation -Mint NFT
 
 ## Script Capabilities
 - [√] Batch account creation
